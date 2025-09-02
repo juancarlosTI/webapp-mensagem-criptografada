@@ -1,0 +1,48 @@
+services:
+  # Banco de dados
+  postgres:
+    image: postgres:16.5
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appsec-container
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start
+    depends_on:
+      - postgres
+      
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: admin
+      DB_PASSWORD: admin123
+      DB_NAME: appdb
+
+    networks:
+      - app-network
+    
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:

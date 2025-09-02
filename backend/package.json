@@ -1,0 +1,21 @@
+{
+  "name": "atividade-19-08",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "node-rsa": "^1.1.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
+  }
+}

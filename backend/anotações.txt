@@ -1,0 +1,1 @@
+- Criptografy service deve ser um service protegido (proteger as rotas com auth)
