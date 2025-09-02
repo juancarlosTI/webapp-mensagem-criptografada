@@ -6,6 +6,7 @@ import CriptografyRouter from './routes/criptografy.routes.js';
 import UserRouter from './routes/user.routes.js';
 import authRoutes from './routes/auth.routes.js'
 import { ensureAuth } from './middlewares/ensureAuth.middleware.js';
+import './prisma/seed.js';
 
 // Instancia do servidor
 const app = express();

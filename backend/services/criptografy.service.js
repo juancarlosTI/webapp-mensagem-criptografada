@@ -1,3 +1,4 @@
+import NodeRSA from 'node-rsa';
 
 // Receber a classe user por injeção de dependencia
 export class CriptografyService {
@@ -5,17 +6,41 @@ export class CriptografyService {
         this.userRepository = userRep;
     }
 
-    assinarTexto(priv_pem) {
+    async assinarTexto(loggedUser, priv_pem) {
         // Requer chave privada
-        if (!user || !user.active) {
-            throw new Error("Usuário inválido ou inativo");
+
+        const user = await this.userRepository.findById(loggedUser);
+
+        if (!user) {
+            throw new Error("Usuário não encontrado");
         }
-        let key;
-        return key
+
+        if (!user.privKey || user.privKey !== priv_pem) {
+            throw new Error("Chave privada não corresponde ao usuário logado");
+        }
+
+
+
+        const mensagemEncriptada = priv_pem.encrypt(inputParaEncriptar, 'base64');
+        console.log(mensagemEncriptada);
+
+        return mensagemEncriptada;
     }
 
-    gerarChaves() {
+    async gerarChaves(loggedUser) {
+
+        const user = await this.userRepository.findById(loggedUser);
+
+        if (!user) {
+            throw new Error("Usuário não encontrado");
+        }
+
         // Registra chaves em nome de um usuário
-        return { 'pub': pub_pem, 'priv': priv_pem }
+        key = new NodeRSA({ b: 2048 });
+        let publicKeyString = key.exportKey('public');
+        let privateKeyString = key.exportKey('private');
+
+        
+        return {'user': user.id,'chave_publica': publicKeyString, 'chave_privada': privateKeyString }
     }
 }
