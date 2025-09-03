@@ -2,33 +2,35 @@
 import { Router } from "express";
 import { UserRepository } from "../repositories/user.repo.js";
 import { CriptografyService } from "../services/criptografy.service.js";
+import { prisma } from '../prisma/prisma.js';
 
 const router = Router()
 
-router.get("/createKeys",(req,res) => {
+router.get("/createKeys",async(req,res) => {
     try {
 
-        const userRepo = new UserRepository();
+        const userRepo = new UserRepository(prisma);
         const criptoService = new CriptografyService(userRepo);
 
-        const findUser = userRepo.findById(req.user.id);
+        console.log("req.user.id: ",req.user.id)
+
+        const findUser = await userRepo.findById(req.user.id);
+
         // Verificar sessão
-        const chaves = criptoService.gerarChaves(findUser);
+        console.log("findUser: ",findUser);
+
+
+        const chaves = await criptoService.gerarChaves();
         // Chamar persistencia
+        console.log('Chaves: ', chaves);
 
-        if (!chaves){
-            return null
-        }
-
-        console.log(chaves);
-
-        const saveKeys = userRepo.saveKeys(chaves);
+        const saveKeys = await userRepo.saveKeys(findUser.id,chaves);
 
         if (!saveKeys){
             return "sem chaves"
         }
 
-        return saveKeys;
+        return res.status(201).json({"userid":findUser.id,"priv_pem": chaves.chave_privada,"pub_pem": chaves.chave_publica});
     }
 
     catch(err){

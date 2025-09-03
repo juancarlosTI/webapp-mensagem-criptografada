@@ -1,14 +1,17 @@
-import { prisma } from '../generated/prisma/index.js';
+import { prisma } from '../prisma/prisma.js';
 
 export class CriptografyRepository {
-  async create(userId, data) {
+  constructor(userRepo) {
+    this.userRepository = userRepo;
+  }
+  async createKeys(keys) {
     // Cria um novo registro de chave no banco
-    return await prisma.keys.create({
-      data: {
-        chave_publica: data.chave_publica,
-        chave_privada: data.chave_privada,
-        userId: userId
-      }
+    return await this.userRepository.saveKeys({
+
+      chave_publica: keys.chave_publica,
+      chave_privada: keys.chave_privada,
+      userId: keys.userId
+
     });
   }
 }

@@ -1,24 +1,18 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
+import { prisma } from '../prisma/prisma.js';
 
 async function main() {
   const users = [
-    { username: 'admin', password: '1234' },
-    { username: 'user', password: 'abcd' }
+    { nome: 'admin', email: '1234@user.com' },
+    { nome: 'user', email: 'abcd@user.com' }
   ];
 
   for (const u of users) {
-    // Criptografar senha antes de salvar
-    const hashedPassword = await bcrypt.hash(u.password, 10);
-
     await prisma.user.upsert({
-      where: { username: u.username },
+      where: { email: u.email }, // email é único
       update: {}, // não atualiza se já existir
       create: {
-        username: u.username,
-        password: hashedPassword
+        nome: u.nome,
+        email: u.email
       },
     });
   }

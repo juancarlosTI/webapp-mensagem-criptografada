@@ -1,0 +1,19 @@
+services:
+  # Frontend HTML/JS/CSS
+  frontend:
+    build:
+      context: .   
+      dockerfile: Dockerfile
+    container_name: frontend-container
+    ports:
+      - "8080:8080"
+    networks:
+      - front-network
+
+networks:
+  front-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  node_modules:

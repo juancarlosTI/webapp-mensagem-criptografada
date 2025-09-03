@@ -1,26 +1,17 @@
-# Iniciar o backend
 FROM node:22.19-alpine
 
-RUN apk add --no-cache \
-    bash \
-    git \
-    openssl \
-    curl \
-    netcat-openbsd \
-    && rm -rf /var/cache/apk/*
+RUN apk add --no-cache bash git openssl curl netcat-openbsd
 
 WORKDIR /app
 
-# Verificar as dependencias instaladas
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
-# Copiar o app
 COPY . .
 
+RUN npx prisma generate
 
-# Iniciar backend na porta 3000
 EXPOSE 3000
 
-# Comando de inicialização
-CMD ["npm", "start"]
+# Use o script de start que aguarda o banco e roda as migrações
+CMD ["./start.sh"]

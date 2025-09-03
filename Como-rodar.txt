@@ -1,0 +1,14 @@
+- Abra os docker-compose independente (backend e frontend)
+
+1. Entre na pasta backend e digite "docker compose up --build"
+2. Entre na pasta frontend e digite "docker compose up --build"
+
+Para fazer login:
+
+{ nome: 'admin', email: '1234@user.com' },
+{ nome: 'user', email: 'abcd@user.com' }
+
+Para gerar uma chave:
+
+- Clique no botão gerar chaves e espere a exibição.
+

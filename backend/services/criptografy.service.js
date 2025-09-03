@@ -27,20 +27,14 @@ export class CriptografyService {
         return mensagemEncriptada;
     }
 
-    async gerarChaves(loggedUser) {
-
-        const user = await this.userRepository.findById(loggedUser);
-
-        if (!user) {
-            throw new Error("Usuário não encontrado");
-        }
-
+    async gerarChaves() {
         // Registra chaves em nome de um usuário
-        key = new NodeRSA({ b: 2048 });
+        console.log('Req chega aqui');
+        const key = new NodeRSA({ b: 2048 });
         let publicKeyString = key.exportKey('public');
         let privateKeyString = key.exportKey('private');
 
         
-        return {'user': user.id,'chave_publica': publicKeyString, 'chave_privada': privateKeyString }
+        return {'chave_publica': publicKeyString, 'chave_privada': privateKeyString }
     }
 }

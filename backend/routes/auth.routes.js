@@ -2,31 +2,28 @@ import Router from 'express'
 import passport from 'passport';
 
 const router = Router()
-
-// --- Rotas ---
+// Rotas
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) return next(err);
-        if (!user) return res.status(401).send(info.message)
-
+        if (!user) return res.status(401).json({ message: info.message });
         req.logIn(user, (err) => {
             if (err) return next(err);
-            return res.send(`Olá ${user.username}, login realizado!`);
+            return res.json({ id: user.id, nome: user.nome, email: user.email });
         });
     })(req, res, next);
-
 });
 
-router.post('/logout', (req, res) => {
+router.post('/auth/logout', (req, res) => {
     req.logout(err => {
         if (err) return res.status(500).send('Erro no logout');
-        res.send('Logout realizado com sucesso!');
+        res.send('Logout realizado!');
     });
 });
 
-router.get('/perfil', (req, res) => {
+router.get('/auth/perfil', (req, res) => {
     if (!req.isAuthenticated()) return res.status(401).send('Não autorizado');
-    res.send(`Perfil do usuário: ${req.user.username}`);
+    res.json({ id: req.user.id, nome: req.user.nome, email: req.user.email });
 });
 
 export default router;
